@@ -1,0 +1,18 @@
+
+
+body {
+  font-family: sans-serif;
+  background-color: #F4F4F4;
+  color: #333333;
+}  
+
+.feed {
+
+  background-color: white;
+  border: 1px solid #9E9E9E;
+  padding: 0px 15px 15px 15px;
+  margin-bottom:  12px;
+}  
+  
+.item-published { white-space: nowrap; font-size: 12px; color: grey; }
+.item-title     {  }

@@ -1,11 +1,55 @@
-<h1>Pluto Planet Blank Top Template Sample</h1>
+<html>
+  <head>
+   <meta charset='UTF-8'>
+   <meta name='generator' content='<%= Pluto.banner %>'>
+   <title><%= site['title'] %></title>
 
-<% Feed.all.each do |feed| %>
+   <link rel='stylesheet' type='text/css' href='top.css'>
+
+  </head>
+  <body>
+    
+<h1><%= site['title'] %></h1>
+
+<!-- use a table w/ three colums -->
+
+<table>
+  <colgroup>
+    <col width='33%'>
+    <col width='33%'>
+    <col width='33%'>
+  </colgroup>
+<tr>
+  <!-- false - in_groups_of => use do NOT pad with nil option -->
+<%  Feed.all.in_groups_of(3,false) do |feeds| %>
+<td>
+  <!-- start new column -->
+  
+  <% feeds.each do |feed| %>
+
+
+<div class='feed'>
 <h3><%= feed.title %> </h3>
-<ul>
+<table>
   <% feed.items.latest.limit(11).each do |item| %>
-    <li><%= item.title %> (<%= item.published_at %>)</li>
-  <% end %>
-</ul>
-<% end %>
+    <tr>
+     <td>
+      <span class='item-published'><%= item.published_at.strftime("%b %d, '%y") %></span>
+     </td>
+     <td>
+       <span class='item-title'><%= item.title %></span>
+     </td>
+    </tr>
+  <% end %><!-- each item -->
+</table>
+</div>
 
+
+  <% end %><!-- each feed (inside column) -->
+ </td>
+<% end %><!-- each column-->
+  </tr>
+</table>
+
+</body>
+</html>

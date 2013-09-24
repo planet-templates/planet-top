@@ -20,24 +20,53 @@
     <col width='33%'>
   </colgroup>
 <tr>
-  <!-- false - in_groups_of => use do NOT pad with nil option -->
-<%  Feed.all.in_groups_of(3,false) do |feeds| %>
-<td>
+
+<%  Feed.latest.all.in_columns(3).each do |feeds| %>
+<td valign='top'>
   <!-- start new column -->
-  
+
   <% feeds.each do |feed| %>
 
 
 <div class='feed'>
-<h3><%= feed.title %> </h3>
+<h3><a href='<%= feed.url %>'><%= feed.title %></a></h3>
 <table>
-  <% feed.items.latest.limit(11).each do |item| %>
+  <!-- todo:
+     include latest 11 (more than 4 add hidden
+       plus add a more toggle button to show all 11!! )
+    -->
+  <% feed.items.latest.limit(4).each do |item|
+     
+      ## todo: use markdownify in future version
+    item_summary_plain_text = strip_tags( item.summary )
+    item_summary_plain_text.gsub!( '"', "'" )
+    item_summary_plain_text.gsub!( /(http|https):\/\//m, '' )
+    item_summary_plain_text.gsub!( /&nbsp;/, ' ' )
+    item_summary_plain_text.gsub!( /[ \t]{3,}/, '  ' ) # keep no more than two spaces
+    item_summary_plain_text.gsub!( /\n{2,}/m, "\n\n" ) # keep no more than two new lines
+    item_summary_plain_text.gsub!( /[ \t\n]+$/m, '' ) # remove all trailing spaces
+    item_summary_plain_text.gsub!( /^[ \t\n]+/m, '' ) # remove all leading spaces
+
+    ## todo: unescape all &xx; entities -html and unicode - how?
+
+    item_summary_plain_text = item_summary_plain_text[0..700]
+  %>
     <tr>
-     <td>
-      <span class='item-published'><%= item.published_at.strftime("%b %d, '%y") %></span>
+     <td valign='top'>
+      <span class='item-published'>
+          <!-- fix/todo: show year if not current year
+             e.g. use "%b %d, '%y"
+          -->
+        <%= item.published_at.strftime("%b %d") %>
+      </span>
      </td>
      <td>
-       <span class='item-title'><%= item.title %></span>
+       <span class='item-title'>
+           <a href='<%= item.url %>' title="<%= item_summary_plain_text %>">
+              <%= item.title %>
+           </a>
+       </span>
+       <span class='item-time-ago-in-words'><%= time_ago_in_words( item.published_at ) %></span>
      </td>
     </tr>
   <% end %><!-- each item -->

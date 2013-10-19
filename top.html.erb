@@ -21,7 +21,7 @@
 <tr>
 
 <!-- check/fix: check if it will work w/o .all. - depreciated in rails 4+ -->
-<%  site.feeds.latest.all.in_columns(3).each do |feeds| %>
+<%  site.feeds.latest.in_columns(3).each do |feeds| %>
 <td valign='top'>
   <!-- start new column -->
 
@@ -29,7 +29,7 @@
 
 
 <div class='feed'>
-<h3><a href='<%= feed.url %>'><%= feed.title %></a></h3>
+<h3><%= link_to feed.title, feed.url %></h3>
 <table>
   <!-- todo:
      include latest 11 (more than 4 add hidden
@@ -38,18 +38,15 @@
   <% feed.items.latest.limit(4).each do |item|
      
       ## todo: use markdownify in future version
-    item_summary_plain_text = strip_tags( item.summary )
-    item_summary_plain_text.gsub!( '"', "'" )
-    item_summary_plain_text.gsub!( /(http|https):\/\//m, '' )
-    item_summary_plain_text.gsub!( /&nbsp;/, ' ' )
-    item_summary_plain_text.gsub!( /[ \t]{3,}/, '  ' ) # keep no more than two spaces
-    item_summary_plain_text.gsub!( /\n{2,}/m, "\n\n" ) # keep no more than two new lines
-    item_summary_plain_text.gsub!( /[ \t\n]+$/m, '' ) # remove all trailing spaces
-    item_summary_plain_text.gsub!( /^[ \t\n]+/m, '' ) # remove all leading spaces
+      ## todo: unescape all &xx; entities -html and unicode - how?
 
-    ## todo: unescape all &xx; entities -html and unicode - how?
-
-    item_summary_plain_text = item_summary_plain_text[0..700]
+      if item.summary
+        item_snippet_plain_text = strip_tags( item.summary )[0..500]
+      elsif item.content
+        item_snippet_plain_text = strip_tags( item.content )[0..500]
+      else
+        item_snippet_plain_text = '-/-'
+      end
   %>
     <tr>
      <td valign='top'>
@@ -57,16 +54,14 @@
           <!-- fix/todo: show year if not current year
              e.g. use "%b %d, '%y"
           -->
-        <%= item.published_at.strftime("%b %d") %>
+        <%= item.published.strftime("%b %d") %>
       </span>
      </td>
      <td>
        <span class='item-title'>
-           <a href='<%= item.url %>' title="<%= item_summary_plain_text %>">
-              <%= item.title %>
-           </a>
+           <%= link_to item.title, item.url, title: item_snippet_plain_text %>
        </span>
-       <span class='item-time-ago-in-words'><%= time_ago_in_words( item.published_at ) %></span>
+       <span class='item-time-ago-in-words'><%= time_ago_in_words( item.published ) %></span>
      </td>
     </tr>
   <% end %><!-- each item -->

@@ -1,6 +1,7 @@
 # pakman manifest
 
 __file__.top.html  top.html.erb
-top.css
+
+css/top.css
 
 

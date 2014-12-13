@@ -1,0 +1,21 @@
+{
+  "name": "planet-top",
+  "version": "0.1.0",
+  "description": "top - planet template pack",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/planet-templates/planet-top.git"
+  },
+  "keywords": [
+    "planet",
+    "pluto",
+    "top",
+    "planet-templates"
+  ],
+  "author": "Gerald Bauer",
+  "license": "Public Domain",
+  "bugs": {
+    "url": "https://github.com/planet-templates/planet-top/issues"
+  },
+  "homepage": "https://github.com/planet-templates/planet-top"
+}

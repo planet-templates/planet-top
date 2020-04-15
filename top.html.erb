@@ -22,7 +22,7 @@
 <tr>
 
 <!-- check/fix: check if it will work w/o .all. - depreciated in rails 4+ -->
-<%  site.feeds.latest.in_columns(3).each do |feeds| %>
+<%  site.feeds.latest.to_a.in_columns(3).each do |feeds| %>
 <td valign='top'>
   <!-- start new column -->
 
